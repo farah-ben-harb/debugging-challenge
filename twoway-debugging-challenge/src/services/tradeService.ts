@@ -7,35 +7,35 @@ export function normalizeTrade(trade: Trade): NormalizedTrade | null {
   if (!symbol) return null;
   if (side !== "BUY" && side !== "SELL") return null;
 
-  if (trade.price < 0 || trade.quantity < 0) return null;
+  if (trade.price <=0 || trade.quantity <= 0) return null;
 
-  return { ...trade, symbol, side };
+  return { ...trade, symbol: symbol.toUpperCase(), side };
 }
 
 export function listTrades(source: Trade[], filters: TradeFilters = {}): NormalizedTrade[] {
   let result = source
     .map(normalizeTrade)
     .filter((trade): trade is NormalizedTrade => trade !== null);
-
   if (filters.symbol) {
-    result = result.filter((trade) => trade.symbol === filters.symbol);
+    const normalizedSymbol = filters.symbol.trim().toUpperCase();
+    result = result.filter((trade) => trade.symbol === normalizedSymbol);
   }
 
   if (filters.side) {
     result = result.filter((trade) => trade.side === filters.side);
   }
 
-  result.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+  result.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
 
   const page = filters.page ?? 1;
   const limit = filters.limit ?? 20;
-  const start = page * limit;
+  const start = (page - 1 ) * limit;
 
   return result.slice(start, start + limit);
 }
 
 export function findTradeById(source: Trade[], id: string | number): NormalizedTrade | null {
-  const trade = source.find((item) => item.id === id);
+  const trade = source.find((item) => item.id == id);
   return trade ? normalizeTrade(trade) : null;
 }
 
@@ -60,11 +60,11 @@ export function buildMarketSummary(source: Trade[]): QuoteSummary[] {
     const row = summary.get(trade.symbol)!;
 
     if (trade.side === "BUY") {
-      row.bestBid = row.bestBid === null ? trade.price : Math.min(row.bestBid, trade.price);
+      row.bestBid = row.bestBid === null ? trade.price : Math.max(row.bestBid, trade.price);
     }
 
     if (trade.side === "SELL") {
-      row.bestAsk = row.bestAsk === null ? trade.price : Math.max(row.bestAsk, trade.price);
+      row.bestAsk = row.bestAsk === null ? trade.price : Math.min(row.bestAsk, trade.price);
     }
 
     row.totalQuantity += trade.quantity;
