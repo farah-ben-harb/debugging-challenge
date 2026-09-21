@@ -46,4 +46,14 @@ test("buildMarketSummary calculates best prices", () => {
   }]);
 });
 
-/* Add at least one regression test for a bug you fix. */
+test("listTrades returns the correct second page", () => {
+  const result = listTrades(sampleTrades, {
+    page: 2,
+    limit: 2
+  });
+
+  assert.deepEqual(
+    result.map((trade) => trade.id),
+    [2, 1]
+  );
+});
