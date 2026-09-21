@@ -13,7 +13,7 @@ async function loadTrades() {
   const params = new URLSearchParams();
 
   if (symbolFilter.value.trim()) {
-    params.set("instrument", symbolFilter.value.trim());
+    params.set("symbol", symbolFilter.value.trim());
   }
 
   if (sideFilter.value) {
