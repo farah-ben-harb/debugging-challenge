@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trading Dashboard</title>
+</head>
+<body>
+  <h1>Trading Dashboard</h1>
+
+  <input id="symbolFilter" placeholder="Symbol e.g. EURUSD" />
+  <select id="sideFilter">
+    <option value="">All sides</option>
+    <option value="BUY">BUY</option>
+    <option value="SELL">SELL</option>
+  </select>
+  <button id="reloadButton">Reload</button>
+
+  <p id="status"></p>
+  <p id="error"></p>
+
+  <h2>Trades</h2>
+  <table border="1">
+    <thead><tr><th>ID</th><th>Symbol</th><th>Side</th><th>Price</th><th>Quantity</th><th>Broker</th></tr></thead>
+    <tbody id="tradeBody"></tbody>
+  </table>
+
+  <h2>Market Summary</h2>
+  <table border="1">
+    <thead><tr><th>Symbol</th><th>Best Bid</th><th>Best Ask</th><th>Total Qty</th><th>Trades</th></tr></thead>
+    <tbody id="summaryBody"></tbody>
+  </table>
+
+  <script src="/app.js"></script>
+</body>
+</html>
